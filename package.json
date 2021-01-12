@@ -2,7 +2,7 @@
   "name": "todo_app",
   "version": "1.0.0",
   "description": "todo app",
-  "main": "tarefa.js",
+  "main": "app_todo.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,5 +10,14 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericwdw/TODO_APP.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ericwdw/TODO_APP/issues"
+  },
+  "homepage": "https://github.com/ericwdw/TODO_APP#readme"
 }
