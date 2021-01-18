@@ -5,6 +5,7 @@ module.exports = (app) => {
     });
 
     app.post('/usuario', (req, res) => {
-        res.send('<h1>Rota Post de Usuario ativada: usuario adicionado ao banco de dados</h1>')
+        console.log(req.body);
+        res.send('<h1>Rota Post de Usuario ativada: usuario adicionado ao banco de dados</h1>');
     })
 }
