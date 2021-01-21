@@ -1,11 +1,14 @@
+const modelTarefa = require('../model/tarefa_model');
 
-module.exports = (app) => {
+module.exports = (app,bancoDados) => {
     app.get('/tarefa', (req, res) => {
-        res.send('<h1>Rota Get de Tarefa ativada: tarefa adicionada ao banco de dados</h1>')
+        res.send(bancoDados.tarefa)
     });
 
     app.post('/tarefa', (req, res) => {
-        console.log(req.body);
+        const newModelTarefa = req.body;
+        bancoDados.tarefa.push(newModelTarefa);
         res.send('<h1>Rota Post de Tarefa ativada: tarefa adicionada ao banco de dados</h1>')
     });
 };
+
