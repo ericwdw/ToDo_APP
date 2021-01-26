@@ -9,7 +9,7 @@ const port = 8080;
 
 const tarefaController = require('./controller/tarefa_controller');
 const usuarioController = require('./controller/usuario_controller');
-const bancoDados = require('./infra/bd');
+const bancoDados = require('./infra/sqlite-db');
 
 tarefaController(app,bancoDados);
 usuarioController(app,bancoDados);

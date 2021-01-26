@@ -1,9 +1,13 @@
+const bd = require("../infra/bd");
 
 module.exports = (app,bancoDados) => {
 
     app.get('/usuario', (req, res) => {
 
-        res.send(bancoDados.usuario)
+        bancoDados.all("SELECT * FROM USUARIOS;", (err, rows)=> {
+            if(err) throw new Error("Erro ao consultar tabela");
+            else res.send(rows);
+        });
 
     });
 
