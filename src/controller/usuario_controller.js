@@ -1,23 +1,34 @@
-const bd = require("../infra/bd");
+const UsuariosDao = require("../DAO/usuarios-dao");
 
 module.exports = (app,bancoDados) => {
 
-    app.get('/usuario', (req, res) => {
+    const usuarioDao = new UsuariosDao(bancoDados);
 
-        bancoDados.all("SELECT * FROM USUARIOS;", (err, rows)=> {
-            if(err) throw new Error("Erro ao consultar tabela");
-            else res.send(rows);
-        });
+    app.get('/usuario', async (req, res) => {
 
+        try {
+            const listaDeUsuarios = await usuarioDao.listaUsuarios();
+            res.send(listaDeUsuarios)
+
+        } catch(err) {
+            res.send(err)
+        }
+        
+        /* promessa.listaUsuarios()
+        .then((usuarios)=>{
+            res.send(usuarios);
+        })
+        .catch((erro)=>{
+            res.send(erro);
+        }) */
     });
 
     app.post('/usuario', (req, res) => {
 
-        const newModelUsuario = req.body;
-
-        bancoDados.usuario.push(newModelUsuario);
-
-        res.send('<h1>Rota Post de Usuario ativada: usuario adicionado ao banco de dados</h1>');
+        bancoDados.run(`INSERT INTO USUARIOS VALUES (?,?,?,?)`,[req.body.id,req.body.nome,req.body.email,req.body.senha], (err,rows)=>{
+            if(err) throw new Error(`Erro ao inserir usuario: ${err}`);
+            else res.send('<h1>Sucesso, Usuario adicionado</h1>');
+        })
 
     });
 
