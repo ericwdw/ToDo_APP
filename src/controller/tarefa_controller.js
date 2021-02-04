@@ -2,7 +2,12 @@ const modelTarefa = require('../model/tarefa_model');
 
 module.exports = (app,bancoDados) => {
     app.get('/tarefa', (req, res) => {
-        res.send(bancoDados.tarefa)
+
+        bancoDados.all("SELECT * FROM TAREFAS;", (err, rows)=> {
+            if(err) throw new Error("Erro ao consultar tabela");
+            else res.send(rows);
+        });
+
     });
 
     app.post('/tarefa', (req, res) => {
