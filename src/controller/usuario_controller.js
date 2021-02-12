@@ -14,64 +14,72 @@ module.exports = (app,bancoDados) => {
             res.send(err)
         }
         
-        /* promessa.listaUsuarios()
-        .then((usuarios)=>{
-            res.send(usuarios);
-        })
-        .catch((erro)=>{
-            res.send(erro);
-        }) */
     });
 
-    app.post('/usuario', (req, res) => {
+    app.post('/usuario', async (req, res) => {
 
-        bancoDados.run(`INSERT INTO USUARIOS VALUES (?,?,?,?)`,[req.body.id,req.body.nome,req.body.email,req.body.senha], (err,rows)=>{
-            if(err) throw new Error(`Erro ao inserir usuario: ${err}`);
-            else res.send('<h1>Sucesso, Usuario adicionado</h1>');
-        })
+        try {
+            
 
-    });
+            console.log(req.body.nome)
 
-    app.get('/usuario/:email', (req, res) => {
+            await usuarioDao.insereUsuarios(req.body.id,req.body.nome,req.body.email,req.body.senha);
 
-        const respostaUsuario = [];
+            res.send("Usuario inserido com sucesso");
 
-        for(let user of bancoDados.usuario){
-
-            if(user.email == req.params.email){
-                respostaUsuario.push(user);
-            };
-        };
-        if(respostaUsuario.length == 0){
-            res.send("<h1>Usuario nao encontrado</h1>");
-        } else{
-            res.send(respostaUsuario);
-        }     
-    });
-
-    app.delete('/usuario/:email', (req,res) =>{
-
-        let usuarioNDeletado = [];
-
-        for(let i=0; i<bancoDados.usuario.length; i++){
-
-            if(bancoDados.usuario[i].email!==req.params.email){
-                usuarioNDeletado.push(bancoDados.usuario[i]);
-            };
-        };
-        bancoDados.usuario = usuarioNDeletado;
-        res.send("<h1>O usuario com o email " + req.params.email + " foi deletado</h1>")
-    });
-
-    app.put('/usuario/:email', (req,res) => {
-
-        for(let i = 0; i < bancoDados.usuario.length; i++){
-
-            if(bancoDados.usuario[i].email == req.params.email){
-                bancoDados.usuario[i].email = "asdas"        
-            };
+        } catch(err) {
+            res.send(err)
         }
-        res.send("<h1>Registro: " + req.params.email + " atualizado</h1>");
+
+    });
+
+    app.get('/usuario/:email', async (req, res) => {
+
+        try{
+
+            const buscaDeUsuario = await usuarioDao.buscaUsuario(req.params.email);
+
+            if(buscaDeUsuario.length == 0){
+                res.send("<h1>Usuário não encontrado</h1>");
+            } else{
+                res.send(buscaDeUsuario);
+            }
+
+        } catch (err){
+            res.send(err)
+        }
+           
+    });
+
+    //falta uma condicional no delete que avisar se o usuario nao for encontrado para deletar!!!
+
+    app.delete('/usuario/:nome', async (req,res) =>{
+
+        try {
+            await usuarioDao.deletaUsuario(req.params.nome);
+
+            res.send(`<h1>O Usuário ${req.params.nome} foi deletado</h1>`);
+
+        } catch(err) {
+            res.send(err)
+        }
+
+    });
+
+    app.put('/usuario/:email/:id', async (req,res) => {
+
+        try {
+            const teste = await usuarioDao.atualizaUsuario(req.params.email,req.params.id);
+
+            console.log(teste);
+
+            res.send(`<h1>Usuário com ID ${req.params.id} teve seu email atualizado para ${req.params.email} </h1>`);
+
+        } catch(err) {
+            res.send(err)
+        }
+
+        
     });
 
 }
