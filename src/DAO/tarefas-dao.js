@@ -1,26 +1,26 @@
-module.exports = class UsuariosDao {
+module.exports = class TarefasDao {
 
     constructor(bancoDados){
         
         this.bancoDados = bancoDados;
     }
 
-    listaUsuarios(){
+    listaTarefas(){
 
         return new Promise((resolve,reject)=>{
-            this.bancoDados.all("SELECT * FROM USUARIOS;", (err, rows)=> {
+            this.bancoDados.all("SELECT * FROM TAREFAS;", (err, rows)=> {
                 if(err) reject("Erro ao consultar a tabela");
                 else resolve(rows);
             });    
         });
     };
 
-    insereUsuarios(ID,NOME,EMAIL,SENHA){
+    insereTarefas(ID,TITULO,DESCRICAO,STATUS,DATACRIACAO,IDUSUARIO){
 
         return new Promise((resolve,reject)=>{
 
-            this.bancoDados.run(`INSERT INTO USUARIOS VALUES (?,?,?,?)`,[ID,NOME,EMAIL,SENHA], (err,rows)=>{
-                if(err) reject(`Erro ao inserir usuario: ${err}`);
+            this.bancoDados.run(`INSERT INTO TAREFAS VALUES (?,?,?,?,?,?)`,[ID,TITULO,DESCRICAO,STATUS,DATACRIACAO,IDUSUARIO], (err,rows)=>{
+                if(err) reject(`Erro ao inserir tarefa: ${err}`);
                 else resolve(rows);
             })
 
@@ -29,10 +29,10 @@ module.exports = class UsuariosDao {
 
     };
 
-    buscaUsuario(EMAIL){
+    buscaTarefa(STATUS){
 
         return new Promise((resolve,reject)=>{
-            this.bancoDados.all(`SELECT * FROM USUARIOS WHERE EMAIL = (?) ;`,[EMAIL], (err, rows)=> {
+            this.bancoDados.all(`SELECT * FROM TAREFAS WHERE STATUS = (?) ;`,[STATUS], (err, rows)=> {
                 if(err) reject("Erro ao consultar a tabela");
                 else resolve(rows);
             });    
@@ -41,10 +41,10 @@ module.exports = class UsuariosDao {
          
     };
 
-    deletaUsuario(NOME){
+    deletaTarefa(TITULO){
 
         return new Promise((resolve,reject)=>{
-            this.bancoDados.run(`DELETE FROM USUARIOS WHERE NOME = (?); ;`,[NOME], (err, rows)=> {
+            this.bancoDados.run(`DELETE FROM TAREFAS WHERE TITULO = (?);`,[TITULO], (err, rows)=> {
                 if(err) reject("Erro ao consultar a tabela");
                 else resolve(rows);
             });    
@@ -52,12 +52,11 @@ module.exports = class UsuariosDao {
 
     };
 
-    atualizaUsuario(EMAIL,ID){
-        
+    atualizaTarefa(STATUS,ID){
         
         return new Promise((resolve,reject)=>{
             
-            this.bancoDados.run(`UPDATE USUARIOS SET EMAIL = (?) WHERE ID = (?)`,[EMAIL,ID], (err, rows)=> {
+            this.bancoDados.run(`UPDATE TAREFAS SET STATUS = (?) WHERE ID = (?)`,[STATUS,ID], (err, rows)=> {
                 if(err) reject("Erro ao consultar a tabela");
                 else resolve(rows);
             });    
