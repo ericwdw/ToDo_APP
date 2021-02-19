@@ -21,9 +21,6 @@ app.listen(port, () => {
   console.log(`Servidor respondendo em http://localhost:${port}`)
 });
 
-const usuarioExport = require('./model/usuario_model');
-const tarefaExport = require('./model/tarefa_model');
-
 
 
 
